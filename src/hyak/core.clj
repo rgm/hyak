@@ -13,6 +13,10 @@
 (s/def ::fstore (s/keys :req [::root-key ::conn]))
 (s/def ::root-key string?)
 (s/def ::conn (s/keys :req-un [::pool ::spec])) ;; carmine spec
+(s/def ::non-empty-string (s/and string? (complement string/blank?)))
+(s/def ::fkey ::non-empty-string)
+(s/def ::akey ::non-empty-string)
+(s/def ::gkey ::non-empty-string)
 
 (defn make-fstore
   ([]
