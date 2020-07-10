@@ -26,6 +26,8 @@
 
 A drop-in Clojure adaptation of [Flipper][flipper] for feature flagging.
 
+![CI](https://github.com/rgm/hyak/workflows/CI/badge.svg)
+
 Respects Flipper's Redis implementation, so that you can still use the existing
 Ruby admin web UI and API to manage the Redis store.
 

@@ -1,0 +1,25 @@
+name: CI
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - uses: DeLaGuardo/setup-clojure@master
+        with:
+          tools-deps: latest
+      - uses: supercharge/redis-github-action@1.1.0
+        with:
+          redis-version: 6
+      - uses: actions/cache@v2
+        env:
+          cache-name: maven-cache
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('deps.edn') }}
+      - run: clojure -A:test -Stree # pull deps
+      - run: REDIS_URL=redis://127.0.0.1:6379/0 clojure -A:test -m kaocha.runner
