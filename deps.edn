@@ -1,0 +1,7 @@
+{:paths ["src" "test"]
+ :deps {com.taoensso/carmine {:mvn/version "2.20.0-RC1"}}
+ :aliases
+ {:test
+  {:extra-deps {lambdaisland/kaocha {:mvn/version "RELEASE"}
+                org.clojure/test.check {:mvn/version "RELEASE"}}
+   :extra-paths ["test"]}}}
