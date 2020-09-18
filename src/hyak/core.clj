@@ -15,12 +15,16 @@
 (s/def ::conn (s/keys :req-un [::pool ::spec])) ;; carmine spec
 
 (defn make-fstore
+  "Make a flipper store. See `taoensso.carmine/wcar` for documentation of
+   `conn-opts`."
   ([]
-   (make-fstore (or (clojure.core/get (System/getenv) "REDIS_URL")
-                    "redis://127.0.0.1:6379/0")
-                "flipper_features"))
-  ([redis-url features-key]
-   {::conn {:pool {} :spec {:uri redis-url}}
+   (let [redis-url    (or (clojure.core/get (System/getenv) "REDIS_URL")
+                          "redis://127.0.0.1:6379/0")
+         conn-opts    {:pool {} :spec {:uri redis-url}}
+         features-key "flipper_features"]
+     (make-fstore conn-opts features-key)))
+  ([conn-opts features-key]
+   {::conn conn-opts
     ::root-key features-key}))
 
 (defn features [{::keys [root-key conn]}]
