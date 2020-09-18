@@ -21,5 +21,4 @@ jobs:
         with:
           path: ~/.m2
           key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('deps.edn') }}
-      - run: clojure -A:test -Stree # pull deps
       - run: REDIS_URL=redis://127.0.0.1:6379/0 clojure -A:test -m kaocha.runner
