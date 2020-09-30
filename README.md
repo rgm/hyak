@@ -26,12 +26,16 @@
 
 A drop-in Clojure adaptation of [Flipper][flipper] for feature flagging.
 
+Pete Hodgson has a [great overview][hodgson] of why you should consider using
+feature flags, and how not to get burned by them.
+
 ![CI](https://github.com/rgm/hyak/workflows/CI/badge.svg)
 
 Respects Flipper's Redis implementation, so that you can still use the existing
 Ruby admin web UI and API to manage the Redis store.
 
-[flipper]:https://github.com/jnunemaker/flipper
+[flipper]: https://github.com/jnunemaker/flipper
+[hodgson]: https://www.martinfowler.com/articles/feature-toggles.html
 
 ## Usage
 
