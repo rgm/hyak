@@ -161,3 +161,11 @@
      (any? akey))))
 
 (def disabled? (complement enabled?))
+
+(defn enabled-features
+  "Get the set of all enabled features. Useful for dumping to a clojurescript
+  front-end statically."
+  [fstore akey]
+  (let [known-features (features fstore)
+        enabled-for-akey? (fn [fkey] (enabled? fstore fkey akey))]
+    (into #{} (filter enabled-for-akey?) known-features)))
