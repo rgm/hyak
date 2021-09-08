@@ -65,7 +65,7 @@ Ruby admin web UI and API to manage the Redis store.
 ;; actor gate
 ;; Is a actor's identifier in a set of users who get the feature? Good for
 ;; previewing features to known users.
-(hyak/enable-actor! fstore MY-FEATURE-FLAG 40)
+(hyak/enable-actor! fstore MY-FEATURE-FLAG 1001)
 (hyak/enabled? fstore MY-FEATURE-FLAG (:id enabled-actor))  ;; => true
 (hyak/enabled? fstore MY-FEATURE-FLAG (:id disabled-actor)) ;; => false
 (hyak/disable! fstore MY-FEATURE-FLAG)
