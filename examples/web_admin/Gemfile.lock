@@ -11,7 +11,7 @@ GEM
       flipper (~> 0.18.0)
       rack (>= 1.4, < 3)
       rack-protection (>= 1.5.3, < 2.1.0)
-    rack (2.2.3)
+    rack (2.2.3.1)
     rack-protection (2.0.8.1)
       rack
     redis (4.2.1)
