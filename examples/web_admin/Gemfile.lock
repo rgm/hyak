@@ -1,20 +1,30 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    erubi (1.9.0)
-    flipper (0.18.0)
-    flipper-redis (0.18.0)
-      flipper (~> 0.18.0)
-      redis (>= 2.2, < 5)
-    flipper-ui (0.18.0)
+    crass (1.0.6)
+    erubi (1.10.0)
+    flipper (0.24.1)
+    flipper-redis (0.24.1)
+      flipper (~> 0.24.1)
+      redis (>= 3.0, < 5)
+    flipper-ui (0.24.1)
       erubi (>= 1.0.0, < 2.0.0)
-      flipper (~> 0.18.0)
+      flipper (~> 0.24.1)
       rack (>= 1.4, < 3)
-      rack-protection (>= 1.5.3, < 2.1.0)
-    rack (2.2.3)
-    rack-protection (2.0.8.1)
+      rack-protection (>= 1.5.3, <= 2.2.0)
+      sanitize (< 7)
+    mini_portile2 (2.8.0)
+    nokogiri (1.13.6)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    racc (1.6.0)
+    rack (2.2.3.1)
+    rack-protection (2.2.0)
       rack
-    redis (4.2.1)
+    redis (4.6.0)
+    sanitize (6.0.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.12.0)
 
 PLATFORMS
   ruby
