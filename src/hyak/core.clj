@@ -43,6 +43,11 @@
   (clear! fstore fkey)
   (wcar conn (car/srem root-key fkey)))
 
+(defn reset-fstore! [{::keys [root-key conn] :as fstore}]
+  (doseq [fkey (features fstore)]
+    (remove! fstore fkey)
+    (wcar conn (car/del root-key))))
+
 ;; * boolean gates
 
 (defn enable! [{::keys [conn] :as fstore} fkey]
@@ -158,7 +163,7 @@
    (let [gate-values (get-feature conn fkey)
          preds       (map #(partial % gate-values) active-gates)
          any?        (apply some-fn preds)]
-     (any? akey))))
+     (boolean (any? akey)))))
 
 (def disabled? (complement enabled?))
 
@@ -166,6 +171,6 @@
   "Get the set of all enabled features. Useful for dumping to a clojurescript
   front-end statically."
   [fstore akey]
-  (let [known-features (features fstore)
+  (let [known-features    (features fstore)
         enabled-for-akey? (fn [fkey] (enabled? fstore fkey akey))]
     (into #{} (filter enabled-for-akey?) known-features)))
