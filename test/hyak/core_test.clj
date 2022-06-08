@@ -74,3 +74,19 @@
       (is (epsilon= eps (* (/ pct 100) n) (n-enabled akey))))
     (sut/disable! fstore fkey)
     (is (sut/disabled? fstore fkey))))
+
+(deftest group-test
+  (let [admin-akeys    (gen/sample gen/string 5)
+        non-admin-akey (gen/sample gen/string 5)
+        admin?         (set admin-akeys)
+        fkey           (make-fkey "group_feature")]
+    (sut/register-group! :admins admin?)
+    (doseq [admin-akey admin-akeys] (is (sut/disabled? fstore fkey admin-akey)))
+    (is (sut/disabled? fstore fkey non-admin-akey))
+    (sut/enable-group! fstore fkey :admins)
+    (doseq [admin-akey admin-akeys] (is (sut/enabled? fstore fkey admin-akey)))
+    (is (sut/disabled? fstore fkey non-admin-akey))
+    (sut/disable-group! fstore fkey :admins)
+    (doseq [admin-akey admin-akeys] (is (sut/disabled? fstore fkey admin-akey)))
+    (is (sut/disabled? fstore fkey non-admin-akey))
+    (sut/unregister-groups!)))

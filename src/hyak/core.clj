@@ -78,15 +78,17 @@
 
 (defonce *group-registry (atom {}))
 
-(defn gkey->str [gkey] (str "groups/" gkey))
+(defn gkey->str [gkey] (str "groups/" (name gkey)))
 
-(defn str->gkey [s] (string/replace s #"^groups/" ""))
+(defn str->gkey [s] (as-> s $
+                      (string/replace $ #"^groups/" "")
+                      (keyword $)))
 
-(defn register-group [gkey pred]
+(defn register-group! [gkey pred]
   [{:pre [(ifn? pred)]}]
   (swap! *group-registry assoc (gkey->str gkey) pred))
 
-(defn unregister-groups []
+(defn unregister-groups! []
   (reset! *group-registry {}))
 
 (defn group-names []
@@ -108,9 +110,9 @@
   (let [active? (fn [[k v]] (and (string/starts-with? k "groups/")
                                  (= v "1")))
         gkeys   (into [] (comp (filter active?) (map key)) gate-values)
-        preds   (vals (select-keys @*group-registry gkeys))
-        test-fn (apply some-fn preds)]
-    (test-fn akey)))
+        preds   (vals (select-keys @*group-registry gkeys))]
+    (when-not (empty? preds)
+      ((apply some-fn preds) akey))))
 
 ;; percentage of actors gates
 
@@ -155,7 +157,7 @@
                    actor-gate-open?
                    percentage-of-actors-gate-open?
                    percentage-of-time-gate-open?
-                   #_group-gate-open?])
+                   group-gate-open?])
 
 (defn enabled?
   ([fstore fkey] (enabled? fstore fkey nil))
