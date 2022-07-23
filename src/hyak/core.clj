@@ -56,7 +56,7 @@
 
 (def disable! clear!)
 
-(defn boolean-gate-open? [gate-values _akey]
+(defn boolean-gate-open? [gate-values _fkey _akey]
   (= (get gate-values "boolean") "true"))
 
 ;; actor gates
@@ -71,7 +71,7 @@
 (defn disable-actor! [{::keys [conn]} fkey akey]
   (wcar conn (car/hdel fkey (akey->str akey))))
 
-(defn actor-gate-open? [gate-values akey]
+(defn actor-gate-open? [gate-values _fkey akey]
   (= (get gate-values (akey->str akey)) "1"))
 
 ;; group gates
@@ -106,11 +106,14 @@
 (defn disable-group! [{::keys [conn]} fkey gkey]
   (wcar conn (car/hdel fkey (gkey->str gkey))))
 
-(defn group-gate-open? [gate-values akey]
+(defn group-gate-open? [gate-values fkey akey]
   (let [active? (fn [[k v]] (and (string/starts-with? k "groups/")
                                  (= v "1")))
         gkeys   (into [] (comp (filter active?) (map key)) gate-values)
-        preds   (vals (select-keys @*group-registry gkeys))]
+        preds   (some->> gkeys
+                         (select-keys @*group-registry)
+                         vals
+                         (map #(partial % fkey)))]
     (when-not (empty? preds)
       ((apply some-fn preds) akey))))
 
@@ -128,7 +131,7 @@
               (.update (.getBytes akey)))]
     (.getValue crc)))
 
-(defn percentage-of-actors-gate-open? [gate-values akey]
+(defn percentage-of-actors-gate-open? [gate-values _fkey akey]
   (when-let [percent (get gate-values "percentage_of_actors")]
     (let [scaling-factor 1000 ;; gives us a few more decimal places
           n (mod (akey->n akey) (* 100 scaling-factor))]
@@ -143,7 +146,7 @@
 (defn disable-percentage-of-time! [{::keys [conn]} fkey]
   (wcar conn (car/hdel fkey "percentage_of_time")))
 
-(defn percentage-of-time-gate-open? [gate-values _akey]
+(defn percentage-of-time-gate-open? [gate-values _fkey _akey]
   (when-let [percent (get gate-values "percentage_of_time")]
     (< (rand) (/ (Integer/parseInt percent) 100.0))))
 
@@ -163,7 +166,7 @@
   ([fstore fkey] (enabled? fstore fkey nil))
   ([{::keys [conn]} fkey akey]
    (let [gate-values (get-feature conn fkey)
-         preds       (map #(partial % gate-values) active-gates)
+         preds       (map #(partial % gate-values fkey) active-gates)
          any?        (apply some-fn preds)]
      (boolean (any? akey)))))
 

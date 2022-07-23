@@ -78,7 +78,7 @@
 (deftest group-test
   (let [admin-akeys    (gen/sample gen/string 5)
         non-admin-akey (gen/sample gen/string 5)
-        admin?         (set admin-akeys)
+        admin?         (fn [_fkey akey] ((set admin-akeys) akey))
         fkey           (make-fkey "group_feature")]
     (sut/register-group! :admins admin?)
     (doseq [admin-akey admin-akeys] (is (sut/disabled? fstore fkey admin-akey)))
