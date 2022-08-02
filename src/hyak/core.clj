@@ -18,8 +18,7 @@
   "Make a flipper store. See `taoensso.carmine/wcar` for documentation of
    `conn-opts`."
   ([]
-   (let [redis-url    (or (clojure.core/get (System/getenv) "REDIS_URL")
-                          "redis://127.0.0.1:6379/0")
+   (let [redis-url    (System/getenv "REDIS_URL")
          conn-opts    {:pool {} :spec {:uri redis-url}}
          features-key "flipper_features"]
      (make-fstore conn-opts features-key)))

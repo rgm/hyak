@@ -9,7 +9,7 @@
   (defn make-fkey [s] (str PREFIX s)))
 
 (def fstore (sut/make-fstore {:pool {}
-                              :spec {:uri "redis://127.0.0.1:6379/0"}}
+                              :spec {:uri (System/getenv "REDIS_URL")}}
                              "TEST_FEATURES"))
 
 (defn reset-fstore [f]
