@@ -1,5 +1,7 @@
 # Hyak
 
+RETIRED: please see the newer version that includes multiple feature store types at https://github.com/rgm/hyak2
+
 ```
     ~                           ~              ~
        ~~~~     ~          ~~ ~        ~      ~    ~~
